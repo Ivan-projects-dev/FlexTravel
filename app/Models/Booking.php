@@ -17,6 +17,10 @@ class Booking extends Model
         'expire_date',
         'cvc',
     ];
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class);
+    }
     public function setCardNumberAttribute($value)
     {
         $this->attributes['card_number'] = Crypt::encryptString($value);
