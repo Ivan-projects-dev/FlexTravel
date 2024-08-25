@@ -13,7 +13,14 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::where('user_id', auth()->id())->get();
+        if (auth()->user()->is_admin) 
+        {
+            $bookings = Booking::with('trip')->get();
+        }
+        else
+        {
+            $bookings = Booking::with('trip')->where('user_id', auth()->id())->get();
+        }
         return view('bookings.index', compact('bookings'));
     }
     public function create()
@@ -31,7 +38,7 @@ class BookingController extends Controller
             'expire_date' => 'required|date_format:Y-m',
             'cvc' => 'required|string|max:3',
         ]);
-        \Log::info('Store request data:', $request->all());
+        \Log::info('Store request data:', $request->except(['card_number', 'expire_date', 'cvc']));
         $user = Auth::user();
         Booking::create([
             'user_id' => $user->id,
