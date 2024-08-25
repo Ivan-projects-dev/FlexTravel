@@ -16,7 +16,8 @@
                 </datalist></br>
                 <label for="comment">Comment</label><br>
                 <input type="text" name="comment" id="comment" class="form-control"></br>
-                <input type="submit" value="Publish" class="btn btn-success"></br>
+                <input type="submit" value="Publish" class="btn btn-success">
+                <a href="{{ url('/reviews') }}" class="btn btn-secondary" title="Cancel">Cancel</a>
             </form>
         </div>
     </div>
