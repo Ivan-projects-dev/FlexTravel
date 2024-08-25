@@ -12,6 +12,8 @@ Route::get('/public-reviews', [ReviewController::class, 'publicIndex'])->name('p
 Route::resource('trips', TripController::class);
 Route::get('/trips', [TripController::class, 'index'])->name('trips.index');
 Route::get('/trips/{trip}', [TripController::class, 'show'])->name('trips.show');
+Route::get('/trips/sort/{sort?}', [TripController::class, 'index'])->name('trips.index');
+Route::get('/trips/countries/{country}', [TripController::class, 'showTripsByCountry'])->name('trips.countries');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -24,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('bookings/{id}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
 });
 Route::resource('bookings', BookingController::class);
+Route::get('bookings/create', [BookingController::class, 'create'])->name('bookings.create');
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
 Route::resource('/reviews', ReviewController::class)->names([
