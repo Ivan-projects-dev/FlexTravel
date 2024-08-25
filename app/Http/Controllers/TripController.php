@@ -8,10 +8,31 @@ use Illuminate\Support\Facades\Storage;
 
 class TripController extends Controller
 {
-    public function index()
+    public function index($sort = 'destination')
     {
-        $trips = Trip::all();
-        return view('trips.index', compact('trips'));
+        $validSorts = ['destination', 'price'];
+        if (!in_array($sort, $validSorts)) 
+        {
+            $sort = 'destination';
+        }
+        $trips = Trip::orderBy($sort)->get();
+        return view('trips.index', [
+            'trips' => $trips,
+            'sort' => $sort
+        ]);
+    }
+    public function sort($criteria)
+    {
+        $validCriteria = ['destination', 'price'];
+        if (!in_array($criteria, $validCriteria)) 
+        {
+            abort(404);
+        }
+        $trips = Trip::orderBy($criteria)->get();
+        return view('trips.index', [
+            'trips' => $trips,
+            'sort' => $criteria
+        ]);
     }
     public function create()
     {
@@ -87,5 +108,15 @@ class TripController extends Controller
         }
         $trip->delete();
         return redirect('/trips')->with('success', 'Trip deleted successfully!');
+    }
+    public function showTripsByCountry($country)
+    {
+        $validCountries = ['latvia', 'lithuania', 'estonia'];
+        if (!in_array(strtolower($country), $validCountries)) 
+        {
+            abort(404);
+        }
+        $trips = Trip::where('country', ucfirst($country))->get();
+        return view('trips.countries', compact('trips', 'country'));
     }
 }
